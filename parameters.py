@@ -1,0 +1,121 @@
+import os
+import torch
+
+
+''' FOLDER PARAMETERS '''
+
+'''directory info'''
+INSTRUMENT='LJSPEECH'
+AUDIO_PATH=os.path.join("wavs")
+FRAGMENT_CACHE_PATTERN = "{:d}.pth"
+
+FRAGMENT_PATH=os.path.join("Fragment")
+FRAGMENT_CACHE_PATH = os.path.join('Fragment')  #Fragment
+
+#FRAGMENT_PATH_TEST=os.path.join("FragmentTEST")
+
+FRAGMENT_CACHE_PATH_VAL=os.path.join('FragmentVAL')
+
+
+FRAGMENT_CACHE_PATH_TEST=os.path.join('FragmentTEST')
+
+
+
+''' MODEL PARAMETERS '''
+PATH_SAVED_MODELS = os.path.join("Models")
+MODEL_NAME = "Model_" + INSTRUMENT
+MODEL_CHECKPOINT = MODEL_NAME + "_checkpt"
+PATH_TO_CHECKPOINT = os.path.join(PATH_SAVED_MODELS, MODEL_CHECKPOINT + ".pth")
+
+
+
+NUMBER_EPOCHS = 400000#250
+SavemodelPerEpoch=2# 200  #
+valperepoch=2 #1000
+BATCH_SIZE_VAL=12  #all val datas,  a epoch , 200
+BATCH_SIZE =6
+
+
+#GPU_ON = True
+#CUDA_ON = torch.cuda.is_available()
+#DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+#DEVICE = torch.device("cuda:0" if CUDA_ON and GPU_ON else "cpu")
+#DEVICE='cuda:0'
+GPU_ON = False
+CUDA_ON = torch.cuda.is_available()
+DEVICE='cpu'
+#DEVICE = torch.device("cuda:0" if CUDA_ON and GPU_ON else "cpu")
+
+
+
+
+
+''' DATA PARAMETERS '''
+AUDIO_SAMPLE_RATE = 22050  
+FRAME_LENGTH = 1024#AUDIO_SAMPLE_RATE // FRAME_SAMPLE_RATE
+
+
+
+#AUDIOFILE_DURATION = 60  # Seconds
+#FRAGMENT_DURATION = 3  # Seconds
+#FRAGMENTS_PER_FILE = int(AUDIOFILE_DURATION / FRAGMENT_DURATION)
+#SAMPLES_PER_FRAGMENT = FRAGMENT_DURATION * FRAME_SAMPLE_RATE
+
+'''AUDIO info'''
+N_FFT=1024
+F_MIN=0
+F_MAX=8000
+F0_MIN=165
+F0_MAX=225
+HOP_LENGTH=int(N_FFT/4)
+'''fragment info'''
+FRAGMENT_DURATION=3
+FRAGMENT_MEL_LENGTH=int((AUDIO_SAMPLE_RATE//HOP_LENGTH)*FRAGMENT_DURATION)
+FRAGMENT_F0_LENGTH=int((AUDIO_SAMPLE_RATE//HOP_LENGTH)*FRAGMENT_DURATION)
+
+
+''' TRAIN PARAMETERS '''
+SHUFFLE_DATALOADER = True
+
+
+FFT_SIZES = [2048, 1024, 512, 256, 128, 64]
+LEARNING_RATE = 0.0001
+SCHEDULER_RATE = 0.98
+COMPUTE_CACHE = False
+
+
+
+
+
+
+
+
+''' NET PARAMETERS '''
+Binsize=80
+upsamplefactor=8.5
+
+
+LINEAR_OUT_DIM = 512
+HIDDEN_DIM = 512
+NUMBER_HARMONICS = 67
+NUMBER_NOISE_BANDS = 101
+NOISE_ON = True
+SEPARED_NOISE = True
+STFT_NORMALIZED = False
+LOUDNESS_THRESHOLD = 6
+FINAL_SIGMOID = "Mixed"  # Options : "None", "Usual", "Scaled", "Mixed"
+
+
+''' SYNTHESIS PARAMETERS '''
+#SYNTHESIS_DURATION = 2  # Seconds   #??????
+#AUDIO_SAMPLE_RATE = 22050  # Hertz
+MODULAR_PHASE_SUM = True
+HAMMING_WINDOW_LENGTH = 128
+HAMMING_SMOOTHING = False  # Doesn't work properly
+HAMMING_NOISE = True
+SMOOTH_LOUDNESS = True
+REVERB = False
+NOISE_AMPLITUDE = False
+NOISE_LEVEL = 1e-2
+INHARMONIC = False
+INHARMONICITY_FACTOR = 10e-5
