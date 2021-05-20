@@ -27,10 +27,7 @@ def synthetize(a0s, f0s, aa, hh, frame_length, sample_rate, device):
                            align_corners=True)
     f0s = f0s.squeeze(1)
     phases = 2 * np.pi * f0s / sample_rate
-    if MODULAR_PHASE_SUM:
-        phases_acc = modular_sum(phases, signal_length)
-    else:
-        phases_acc = torch.cumsum(phases, dim=1)
+    phases_acc = torch.cumsum(phases, dim=1)
     phases_acc = phases_acc.unsqueeze(-1) * harm_ranks
     aa_sum = torch.sum(aa, dim=2)
     aa_sum[aa_sum == 0.] = 1.
@@ -66,21 +63,6 @@ def prevent_aliasing(ff, aa, f_max, f_min):
     aa[ff >= f_max] = 0
 
     return aa
-
-
-def modular_sum(phases, signal_length):
-    cursor = 0
-    stride = 256
-
-    while cursor < signal_length:
-        phases[..., cursor] %= 2.0 * np.pi
-        phases[..., cursor : cursor + stride] = torch.cumsum(
-            phases[..., cursor : cursor + stride], dim=1
-        )
-        cursor += stride - 1
-    phases %= 2.0 * np.pi
-
-    return phases
 
 
 def interpolate_hamming(tensor, signal_length, frame_length, device):
