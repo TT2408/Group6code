@@ -126,16 +126,3 @@ def interpolate_hamming(tensor, signal_length, frame_length, device):
     interpolation = torch.transpose(interpolation[:, :, 0:signal_length], 1, 2)
 
     return interpolation
-
-
-def reverb(waveform):
-    [fs, ir] = wav.read('ir.wav')
-
-    assert fs == AUDIO_SAMPLE_RATE
-
-    ir = int_2_float(ir)
-
-    wf_rev = np.convolve(waveform, ir)
-    wf_rev = wf_rev[ir.shape[0]-1:ir.shape[0]+waveform.shape[0]] / sum(ir)
-
-    return wf_rev
