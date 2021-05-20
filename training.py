@@ -3,7 +3,6 @@ import librosa
 from net2 import DDSPNet
 from dataloader import Dataset,DatasetVAL
 from synthesis import synthetize
-#from synthesisoriginal import synthetize
 
 from timing import print_time, print_info
 #from loss import compute_stft, spectral_loss
